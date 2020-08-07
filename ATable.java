@@ -5,6 +5,7 @@ public class ATable {
     private  String name;
     private List<String> column = new ArrayList<>();
     private List<String> type = new ArrayList<>();
+    private List<String> typess = new ArrayList<>();
     private List<String> pktable = new ArrayList<>();
     private List<String> fkName = new ArrayList<>();
     private List<String> pkName = new ArrayList<>();
@@ -15,17 +16,19 @@ public class ATable {
 
 
 
-    public ATable(String name, List<String> column, List<String> type, List<String> pktable, List<String> fkName) {
+    public ATable(String name, List<String> column, List<String> type,List<String> typess, List<String> pktable, List<String> fkName) {
         this.name = name;
         this.column = column;
         this.type = type;
+        this.typess = typess;
         this.pktable = pktable;
         this.fkName =fkName;
     }
-    public ATable(String name, List<String> column, List<String> type, List<String> pktable) {
+    public ATable(String name, List<String> column, List<String> type,List<String> typess, List<String> pktable) {
         this.name = name;
         this.column = column;
         this.type = type;
+        this.typess = typess;
         this.pktable = pktable;
 
     }
@@ -69,7 +72,13 @@ public class ATable {
     public void setType(List<String> type) {
         this.type = type;
     }
+    public List<String> getTypess() {
+        return typess;
+    }
 
+    public void setTypess(List<String> typess) {
+        this.typess = typess;
+    }
     public List<String> getPktable() {
         return pktable;
     }

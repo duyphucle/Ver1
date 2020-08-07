@@ -2,7 +2,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.ListScrnid_tmt220;
+//import model.ListScrnid_tmt220;
+
+
 
 public class DTP {
 
@@ -27,32 +29,21 @@ public class DTP {
             }
         }
     }
-    public  ArrayList<Actor> getAllCustomer() throws ClassNotFoundException, SQLException {
-      
-    	Statement statement = connection.createStatement();
-        String sql = "Select * From Actor ";
-        ResultSet rs = statement.executeQuery(sql);
-        ArrayList<Actor> actorList = new ArrayList<>();
-        while (rs.next()) {
-        	  Actor actor =new Actor(rs.getString("actor_id"), rs.getString("first_name"), rs.getString("last_name"));
-        	actorList.add(actor);
-        }
-        return actorList;
-    }
-    public  ArrayList<ListScrnid_tmt220> getTmt220() throws ClassNotFoundException, SQLException {
-    	//Lay toan bo Scrnid va Funcid
-    	//System.out.println(dtp.getTmt220().get(i).getFuncid());
-    	
-    	Statement statement = connection.createStatement();
-        String sql = "Select * From tmt220_func ";
-        ResultSet rs = statement.executeQuery(sql);
-        ArrayList<ListScrnid_tmt220> scrnidList = new ArrayList<>();
-        while (rs.next()) {
-        	ListScrnid_tmt220 scrnid = new ListScrnid_tmt220(rs.getString("FUNCID"), rs.getString("LANG"), rs.getString("SCRNID"));
-        	scrnidList.add(scrnid);
-        }
-        return scrnidList;
-    }
+    
+//    public  ArrayList<ListScrnid_tmt220> getTmt220() throws ClassNotFoundException, SQLException {
+//    	//Lay toan bo Scrnid va Funcid
+//    	//System.out.println(dtp.getTmt220().get(i).getFuncid());
+//    	
+//    	Statement statement = connection.createStatement();
+//        String sql = "Select * From tmt220_func ";
+//        ResultSet rs = statement.executeQuery(sql);
+//        ArrayList<ListScrnid_tmt220> scrnidList = new ArrayList<>();
+//        while (rs.next()) {
+//        	ListScrnid_tmt220 scrnid = new ListScrnid_tmt220(rs.getString("FUNCID"), rs.getString("LANG"), rs.getString("SCRNID"));
+//        	scrnidList.add(scrnid);
+//        }
+//        return scrnidList;
+//    }
     public List<ATable> fullDTP = new ArrayList<>();
 
     public List<String> getTables() throws SQLException {
@@ -116,11 +107,19 @@ public class DTP {
                 switch (typeName) {
                     case "INT":
                     case "TINYINT":
+                    case "SMALLINT":
+                    case "SMALLINT UNSIGNED":
+                    case "TINYINT UNSIGNED":
+                    case "YEAR":
+                    case "MEDIUMINT":
+                    case "MEDIUMINT UNSIGNED":
                         typeName = "int";
                         break;
                     case "NVARCHAR":
                     case "VARCHAR":
                     case "LONGTEXT":
+                    case "CHAR":
+                    case "TEXT":
                         typeName = "String";
                         break;
                     case "DATE":
@@ -129,6 +128,10 @@ public class DTP {
                     case "DOUBLE":
                         typeName = "double";
                         break;
+                    case "FLOAT":
+                    	typeName = "float";
+                    	
+                    
                 }
                 types.add(typeName);
             }
@@ -137,7 +140,58 @@ public class DTP {
 
         return types;
     }
+    public List<String> getTypess(String tableName) throws SQLException {
+    	//Lấy kiểu giá trị khi hàm getInt,getString, khác vs cái trên
+        List<String> types = new ArrayList<>();
+        Statement statement = connection.createStatement();
+        String selectAll = "SELECT * FROM" + "`" + tableName + "`";
+        ResultSet rs = statement.executeQuery(selectAll);
+        //Thuc hien cau lenh SQL
+        ResultSetMetaData resultSetMetaData = rs.getMetaData();
+        //Lay tat ca su lieu trong bang
+        int numColm = resultSetMetaData.getColumnCount();
+        // lay so cot trong bang
 
+        for (int i = 1; i <= numColm; i++) {
+            if (tableName.equals(resultSetMetaData.getTableName(i))) {
+                String typeName = resultSetMetaData.getColumnTypeName(i);
+
+                switch (typeName) {
+                    case "INT":
+                    case "TINYINT":
+                    case "SMALLINT":
+                    case "SMALLINT UNSIGNED":
+                    case "TINYINT UNSIGNED":
+                    case "YEAR":
+                    case "MEDIUMINT":
+                    case "MEDIUMINT UNSIGNED":
+                        typeName = "rs.getInt";
+                        break;
+                    case "NVARCHAR":
+                    case "VARCHAR":
+                    case "LONGTEXT":
+                    case "CHAR":
+                    case "TEXT":
+                        typeName = "rs.getString";
+                        break;
+                    case "DATE":
+                        typeName = "rs.getDate";
+                        break;
+                    case "DOUBLE":
+                        typeName = "rs.getDouble";
+                        break;
+                    case "FLOAT":
+                    	typeName = "rs.getFloat";
+                    	
+                    
+                }
+                types.add(typeName);
+            }
+        }
+        //  statement.close();
+
+        return types;
+    }
     public List<String> getForeignTable(String tableName) throws SQLException {
 
         List<String> pkTable = new ArrayList<>();
@@ -190,6 +244,7 @@ public List<String> getPKColumn(String tableName) throws SQLException {
             fullList.get(i).setName(tables.get(i));
             fullList.get(i).setColumn(getColumns(tables.get(i)));
             fullList.get(i).setType(getTypes(tables.get(i)));
+            fullList.get(i).setTypess(getTypess(tables.get(i)));
             fullList.get(i).setPktable(getForeignTable(tables.get(i)));
             fullList.get(i).setFkName(getForeignColumn(tables.get(i)));
             fullList.get(i).setPkName(getPKColumn(tables.get(i)));
@@ -229,7 +284,15 @@ public List<String> getPKColumn(String tableName) throws SQLException {
 
         return getFullDTP().get(i).getType().get(j);
     }
+    public List<String> typess(int i) throws SQLException {
 
+        return getFullDTP().get(i).getTypess();
+    }
+
+    public String typess(int i, int j) throws SQLException {
+
+        return getFullDTP().get(i).getTypess().get(j);
+    }
     public List<String> pk(int i) throws SQLException {
 
         return getFullDTP().get(i).getPktable();

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -6,12 +7,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
+import model.Actor;
+import sun.reflect.Reflection;
+ 
 
 public class AMain {
     static String hostName = "localhost";
-    static String link = "192.168.23.1";
+    static String link = "C:\\Users\\ld_phuc\\Downloads\\HackaThon_DTP-master\\HackaThon_DTP-master\\";
     
     static String dbName = "sakila";
    // static String dbName = "case_study_version1";
@@ -19,32 +22,43 @@ public class AMain {
     static String password = "123456";
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
- 
+    	
+
     	
     	 
 
-
+ 
 
         DTP dtp = new DTP();
+        DTP1 dtp1 = new DTP1();
         dtp.setFullDTP();
-    
-       for(int i=0;i<dtp.getTmt220().size();i++) {
-        System.out.println(dtp.getTmt220().get(i).getFuncid()+ ":"+ dtp.getTmt220().get(i).getLang());
-       }
-       for(int i=0;i<dtp.tableSize();i++) {
-           System.out.println(dtp.table(i)+ "_"+ dtp.column(i) + "_" +  dtp.type(i));
-          }
-
-      
+        Actor actor = new Actor();
+//        Method[] methods =dtp1.getClass().getDeclaredMethods();
+//        for (Method method : methods) {
+//
+//        	   if (!method.isBridge()) {
+//        	       System.out.println(method.getName());
+//        	   }   
+//        	}
         
-//        ACreateModel aCreateModel = new ACreateModel();
+       System.out.println(actor.getClass().getDeclaredFields()[0].getName());
+       System.out.println(actor.getClass().getDeclaredFields()[1].getName());
+       System.out.println(actor.getClass().getDeclaredFields()[2].getName());
+//       for(int i=0;i<dtp.tableSize();i++) {
+//           System.out.println(dtp.table(i)+ "_"+ dtp.column(i) + "_" +  dtp.typess(i));
+//          }
+//
+//      System.out.println(dtp.typess(1,1));
+//        
+        ACreateModel aCreateModel = new ACreateModel();
+        ACreateObject aCreateOj = new ACreateObject();
 //        ACreateJDBC aCreateJDBC = new ACreateJDBC();
 //        AView aViewCreate = new AView();
 //        AServlet aServlet = new AServlet();
 //        AUtils aUtils = new AUtils();
 
 //        createDirec("src/controller");
-//        createDirec("src/model");
+     //   createDirec("src/model");
 //        createDirec("src/service");
 //        createDirec("src/utils");
 //
@@ -53,12 +67,12 @@ public class AMain {
 //        createFile("web/WEB-INF/layout/sidebarmini.jsp");
 //        createFile("web/WEB-INF/home.jsp");
 //
-//        for (int i = 0; i < dtp.getFull().size(); i++) {
-//            //  createFile("model/" + dtp.table(i).substring(0, 1).toUpperCase() + dtp.table(i).substring(1) + ".java");
+     //   for (int i = 0; i < dtp.getFull().size(); i++) {
+       //      createFile("model/" + dtp.table(i).substring(0, 1).toUpperCase() + dtp.table(i).substring(1) + ".java");
 //            createFile("src/controller/" + dtp.table(i).substring(0, 1).toUpperCase() + dtp.table(i).substring(1) + "Servlet.java");
 //            createDirec("src/service/" + dtp.table(i).toLowerCase());
 //            createDirec("web/WEB-INF/" + dtp.table(i).toLowerCase());
-//        }
+     //   }
 //        for (int i = 0; i < dtp.getFull().size(); i++) {
 //            createFile("web/WEB-INF/" + dtp.table(i).toLowerCase() + "/create.jsp");
 //            createFile("web/WEB-INF/" + dtp.table(i).toLowerCase() + "/edit.jsp");
@@ -76,7 +90,8 @@ public class AMain {
 //
 //
 ////        deleteCRUD();
-//        aCreateModel.createTable();
+//        	aCreateModel.createTable();
+//        	aCreateOj.createObject();
 //        aCreateJDBC.createInterFace();
 //        aCreateJDBC.createService();
 //        aViewCreate.showcreate();
